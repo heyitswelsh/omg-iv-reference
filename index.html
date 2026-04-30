@@ -4,16 +4,728 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>IV Therapy — Company Reference Guide</title>
+<!-- PUSH TO GITHUB: heyitswelsh/omg-iv-reference → index.html -->
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#e2e2e2;background:#0a0a0a;padding:2rem}
 h1{font-size:28px;font-weight:700;margin-bottom:.25rem;color:#fff;letter-spacing:-.5px}
 .subtitle{font-size:14px;color:#555;margin-bottom:2rem}
 h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-bottom:6px;border-bottom:1px solid #222;color:#555;text-transform:uppercase;letter-spacing:.1em}
+.overview-controls{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.ov-btn{padding:7px 14px;background:#1a1a1a;border:1px solid #303030;border-radius:8px;color:#aaa;font-size:13px;font-family:inherit;cursor:pointer;transition:all .15s}
+.ov-btn:hover{background:#252525;color:#fff;border-color:#555}
+.ov-btn.active{border-color:#a855f7;color:#c084fc;background:#1e1030}
+.company-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:1rem}
+
+/* COMPANY CARD */
+.company-card{background:#1a1a1a;border:1px solid #303030;border-radius:12px;padding:1rem 1.1rem 1rem 1.1rem;position:relative;cursor:pointer;transition:border-color .2s,background .2s;min-height:120px}
+.company-card:hover{border-color:#505050;background:#1e1e1e}
+.company-card.selected{border-color:#a855f7;background:#1e1030}
+
+/* ICON STACK — star always first, icons below */
+.icon-stack{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.fav-btn{width:24px;height:24px;background:none;border:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:.25;transition:opacity .2s;flex-shrink:0}
+.fav-btn:hover{opacity:.6}
+.fav-btn.active{opacity:1}
+.icon-box{width:24px;height:24px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.icon-md{background:#b91c1c}
+.icon-gfe{background:#064e3b}
+
+.company-name{font-size:16px;font-weight:700;margin-bottom:8px;color:#fff;padding-right:32px}
+.company-name a{color:#fff;text-decoration:none}
+.company-name a:hover{color:#4ade80}
+.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:5px}
+.badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500}
+.badge.hours{background:#0f2a45;color:#7ec8f8;border:1px solid #1e4a70}
+.badge.age{background:#0f2a1a;color:#5ce87a;border:1px solid #1a5530}
+.badge.note{background:#2e1a00;color:#ffab5e;border:1px solid #7c3d00}
+.address{font-size:12px;color:#aaa;margin-top:6px}
+.warn{font-size:12px;color:#ffab5e;margin-top:6px}
+.service-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid #252525}
+.pill-md{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;background:#3b0000;border:1px solid #7f1d1d;color:#fca5a5}
+.pill-gfe{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;background:#042f1e;border:1px solid #065f3e;color:#6ee7b7}
+
+/* PRICING CONTROLS */
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-wrap input{width:100%;padding:9px 12px 9px 36px;background:#1a1a1a;border:1px solid #303030;border-radius:8px;color:#e2e2e2;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
+.search-wrap input:focus{border-color:#4ade80}
+.search-wrap input::placeholder{color:#555}
+.search-icon{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#555;font-size:14px;pointer-events:none}
+.sort-btn{padding:9px 14px;background:#1a1a1a;border:1px solid #303030;border-radius:8px;color:#aaa;font-size:13px;font-family:inherit;cursor:pointer;transition:all .15s;white-space:nowrap}
+.sort-btn:hover{background:#252525;color:#fff;border-color:#555}
+.sort-btn.active{border-color:#4ade80;color:#4ade80;background:#0f2a1a}
+.result-count{font-size:12px;color:#555}
+
+/* TABS */
+.section-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.tab{font-size:13px;padding:7px 16px;border-radius:20px;border:1px solid #3a3a3a;background:#1e1e1e;color:#bbb;cursor:pointer;font-family:inherit;transition:all .15s;font-weight:500}
+.tab:hover{background:#2a2a2a;color:#fff;border-color:#555}
+.tab.active{background:#fff;color:#0a0a0a;border-color:#fff;font-weight:700}
+
+/* PRICING */
+.pricing-block{display:none}
+.pricing-block.visible{display:block}
+.pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-bottom:1rem}
+.pkg{background:#1a1a1a;border:1px solid #303030;border-radius:10px;padding:1rem 1.1rem;display:flex;flex-direction:column;gap:10px;transition:border-color .2s}
+.pkg:hover{border-color:#4a4a4a}
+.pkg.hidden{display:none}
+.pkg-header{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.pkg-name{font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+.pkg-price{font-size:18px;font-weight:800;color:#4ade80;white-space:nowrap;letter-spacing:-.5px}
+.pkg-price-stack{display:flex;flex-direction:column;gap:2px;align-items:flex-end;flex-shrink:0}
+.pkg-price-mobile{font-size:16px;font-weight:800;color:#4ade80;letter-spacing:-.5px;white-space:nowrap}
+.pkg-price-clinic{font-size:12px;font-weight:600;color:#60a5fa;white-space:nowrap}
+.pkg-divider{height:1px;background:#2a2a2a}
+.pkg-items{list-style:none;padding:0;display:flex;flex-direction:column;gap:5px}
+.pkg-items li{font-size:13px;color:#d4d4d4;padding-left:16px;position:relative;line-height:1.5}
+.pkg-items li::before{content:"";position:absolute;left:3px;top:8px;width:5px;height:5px;border-radius:50%;background:#4ade80;opacity:.6}
+.addon-section{background:#161616;border-radius:10px;padding:1.25rem 1.4rem;margin-top:1.25rem;border:1px solid #303030}
+.addon-section h4{font-size:15px;font-weight:800;margin-bottom:14px;color:#fff;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid #2a2a2a;padding-bottom:10px}
+.addon-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.addon-pill{font-size:14px;padding:6px 15px;border-radius:20px;border:1px solid #3a6b3a;background:#1a2e1a;color:#6ee87a;font-weight:600}
+.note-box{font-size:13px;padding:.875rem 1.1rem;border-radius:8px;background:#1e1030;color:#c084fc;border:1px solid #6b21a8;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start;font-weight:500}
+.note-box::before{content:"ℹ";font-size:15px;flex-shrink:0;color:#a855f7}
+.no-results{text-align:center;padding:3rem;color:#444;font-size:14px;display:none}
+@media(max-width:600px){body{padding:1rem}.company-grid,.pkg-grid{grid-template-columns:1fr}.controls{flex-direction:column}}
 </style>
 </head>
 <body>
+
 <h1>IV Therapy Reference Guide</h1>
-<p class="subtitle">Loading full version...</p>
+<p class="subtitle">12 companies · Pricing, hours, and ingredients</p>
+
+<h2>Company Overview</h2>
+<div class="overview-controls">
+  <button class="ov-btn active" id="ovAll">All Companies</button>
+  <button class="ov-btn" id="ovFav">⭐ Favorites</button>
+  <button class="ov-btn" id="ovAlpha">A–Z</button>
+</div>
+
+<div class="company-grid" id="companyGrid">
+
+  <div class="company-card" data-company="Pure IV" data-tab="pure">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+      <div class="icon-box icon-md"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="white"/><rect x="1" y="6" width="14" height="4" rx="1" fill="white"/></svg></div>
+      <div class="icon-box icon-gfe"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg></div>
+    </div>
+    <div class="company-name"><a href="https://www.pureiv.com/iv-packages-pricing" target="_blank">Pure IV</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–8pm</span></div>
+    <div class="meta-row"><span class="badge age">All ages</span><span class="badge note">After-hour fee after 8pm</span></div>
+    <div class="warn">⚠ Nevada pricing differs</div>
+    <div class="service-pills">
+      <span class="pill-md"><svg width="8" height="8" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="#fca5a5"/><rect x="1" y="6" width="14" height="4" rx="1" fill="#fca5a5"/></svg>Med Director</span>
+      <span class="pill-gfe"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg>GFE</span>
+    </div>
+  </div>
+
+  <div class="company-card" data-company="Elite Mobile IV" data-tab="elite">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+      <div class="icon-box icon-gfe"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg></div>
+    </div>
+    <div class="company-name"><a href="https://www.elitemobileiv.com/mobile-iv" target="_blank">Elite Mobile IV</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 9am–9pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 12+</span></div>
+    <div class="address">📍 104 S Main St, Greenville, SC 29601</div>
+    <div class="service-pills">
+      <span class="pill-gfe"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg>GFE</span>
+    </div>
+  </div>
+
+  <div class="company-card" data-company="Mike's Vitamin Infusions" data-tab="mikes">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+      <div class="icon-box icon-md"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="white"/><rect x="1" y="6" width="14" height="4" rx="1" fill="white"/></svg></div>
+      <div class="icon-box icon-gfe"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg></div>
+    </div>
+    <div class="company-name"><a href="https://www.mikesinfusions.com/mobile-iv-therapy-treatments-north-georgia" target="_blank">Mike's Vitamin Infusions</a></div>
+    <div class="meta-row"><span class="badge hours">Mon–Sun · 8am–8pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 10+</span></div>
+    <div class="service-pills">
+      <span class="pill-md"><svg width="8" height="8" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="#fca5a5"/><rect x="1" y="6" width="14" height="4" rx="1" fill="#fca5a5"/></svg>Med Director</span>
+      <span class="pill-gfe"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg>GFE</span>
+    </div>
+  </div>
+
+  <div class="company-card" data-company="Elevate Mobile IV" data-tab="elevate">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+    </div>
+    <div class="company-name"><a href="https://www.elevatemobileiv.com/iv-therapy-packages" target="_blank">Elevate Mobile IV</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–8pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 18+</span><span class="badge note">16–17 case-by-case · msg Shea</span></div>
+  </div>
+
+  <div class="company-card" data-company="Bliss Mobile IV" data-tab="bliss">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+      <div class="icon-box icon-md"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="white"/><rect x="1" y="6" width="14" height="4" rx="1" fill="white"/></svg></div>
+      <div class="icon-box icon-gfe"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg></div>
+    </div>
+    <div class="company-name"><a href="https://www.blissmobileiv.com/" target="_blank">Bliss Mobile IV</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–9pm</span></div>
+    <div class="meta-row"><span class="badge age">All ages</span></div>
+    <div class="service-pills">
+      <span class="pill-md"><svg width="8" height="8" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="#fca5a5"/><rect x="1" y="6" width="14" height="4" rx="1" fill="#fca5a5"/></svg>Med Director</span>
+      <span class="pill-gfe"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg>GFE</span>
+    </div>
+  </div>
+
+  <div class="company-card" data-company="Zen IV Spa" data-tab="zen">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+      <div class="icon-box icon-md"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="white"/><rect x="1" y="6" width="14" height="4" rx="1" fill="white"/></svg></div>
+      <div class="icon-box icon-gfe"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg></div>
+    </div>
+    <div class="company-name"><a href="https://www.zenivspa.com/" target="_blank">Zen IV Spa</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–9pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 10+</span></div>
+    <div class="service-pills">
+      <span class="pill-md"><svg width="8" height="8" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="#fca5a5"/><rect x="1" y="6" width="14" height="4" rx="1" fill="#fca5a5"/></svg>Med Director</span>
+      <span class="pill-gfe"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg>GFE</span>
+    </div>
+  </div>
+
+  <div class="company-card" data-company="Peach IV" data-tab="peach">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+    </div>
+    <div class="company-name"><a href="https://www.peachiv.com/iv-treatments" target="_blank">Peach IV</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–9pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 18+</span><span class="badge note">16–17 case-by-case · msg Austin</span></div>
+  </div>
+
+  <div class="company-card" data-company="Recoverie NYC" data-tab="recoverie">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+      <div class="icon-box icon-md"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="white"/><rect x="1" y="6" width="14" height="4" rx="1" fill="white"/></svg></div>
+      <div class="icon-box icon-gfe"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg></div>
+    </div>
+    <div class="company-name"><a href="https://www.recoverienyc.com/" target="_blank">Recoverie NYC</a></div>
+    <div class="meta-row"><span class="badge hours">Mobile · 8am–8pm EST</span></div>
+    <div class="meta-row">
+      <span class="badge hours" style="display:flex;flex-direction:column;gap:2px;border-radius:8px">
+        <span style="font-weight:700;color:#93c5fd">Clinic</span>
+        <span>M–F · 8am–9pm</span>
+        <span>Sat · 9am–6pm</span>
+        <span>Sun · 10am–4pm</span>
+      </span>
+    </div>
+    <div class="meta-row"><span class="badge age">All ages</span></div>
+    <div class="address">📍 135 Bridge Park Dr, Brooklyn, NY 11201</div>
+    <div class="service-pills">
+      <span class="pill-md"><svg width="8" height="8" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="#fca5a5"/><rect x="1" y="6" width="14" height="4" rx="1" fill="#fca5a5"/></svg>Med Director</span>
+      <span class="pill-gfe"><svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#6ee7b7" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg>GFE</span>
+    </div>
+  </div>
+
+  <div class="company-card" data-company="My IV Spa" data-tab="myiv">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+    </div>
+    <div class="company-name"><a href="https://www.myivspa.com/" target="_blank">My IV Spa</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–8pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 18+</span></div>
+    <div class="address">📍 1440 NW N River Dr Ste 199, Miami, FL 33125</div>
+  </div>
+
+  <div class="company-card" data-company="Platinum IV Therapy" data-tab="platinum">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+      <div class="icon-box icon-md"><svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="white"/><rect x="1" y="6" width="14" height="4" rx="1" fill="white"/></svg></div>
+    </div>
+    <div class="company-name"><a href="https://www.platinumivtherapy.com/membership" target="_blank">Platinum IV Therapy</a></div>
+    <div class="meta-row"><span class="badge hours">24 / 7</span><span class="badge note">After-hour fee after 8pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 12+ · min 100 lbs</span></div>
+    <div class="address">📍 16515 S 40th St Ste 105, Phoenix, AZ</div>
+    <div class="address">📍 2206 E Williams Field Rd #106, Gilbert, AZ</div>
+    <div class="service-pills">
+      <span class="pill-md"><svg width="8" height="8" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="#fca5a5"/><rect x="1" y="6" width="14" height="4" rx="1" fill="#fca5a5"/></svg>Med Director</span>
+    </div>
+  </div>
+
+  <div class="company-card" data-company="The Good Life" data-tab="goodlife">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+    </div>
+    <div class="company-name"><a href="https://www.thegoodlifeiv.com/" target="_blank">The Good Life</a></div>
+    <div class="meta-row"><span class="badge hours">Every day · 9am–6pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 8+</span></div>
+    <div class="address">📍 4773 N 20th St., Suite B23, Phoenix, AZ 85016</div>
+  </div>
+
+  <div class="company-card" data-company="Reset IV" data-tab="reset">
+    <div class="icon-stack">
+      <button class="fav-btn">⭐</button>
+    </div>
+    <div class="company-name">Reset IV</div>
+    <div class="meta-row"><span class="badge hours">Sun–Sat · 8am–10pm</span></div>
+    <div class="meta-row"><span class="badge age">Ages 18–65</span></div>
+  </div>
+
+</div>
+
+<h2 id="pricing-section">Pricing by Company</h2>
+<div class="section-tabs">
+  <button class="tab active" data-target="pure">Pure IV</button>
+  <button class="tab" data-target="elite">Elite Mobile</button>
+  <button class="tab" data-target="mikes">Mike's</button>
+  <button class="tab" data-target="elevate">Elevate</button>
+  <button class="tab" data-target="bliss">Bliss</button>
+  <button class="tab" data-target="zen">Zen IV</button>
+  <button class="tab" data-target="peach">Peach IV</button>
+  <button class="tab" data-target="recoverie">Recoverie NYC</button>
+  <button class="tab" data-target="myiv">My IV Spa</button>
+  <button class="tab" data-target="platinum">Platinum IV</button>
+  <button class="tab" data-target="goodlife">The Good Life</button>
+  <button class="tab" data-target="reset">Reset IV</button>
+</div>
+
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="searchInput" placeholder="Search packages or ingredients...">
+  </div>
+  <button class="sort-btn" data-sort="asc">Price ↑</button>
+  <button class="sort-btn" data-sort="desc">Price ↓</button>
+  <button class="sort-btn" data-sort="alpha">A–Z</button>
+  <span class="result-count" id="resultCount"></span>
+</div>
+
+<!-- PURE IV -->
+<div id="block-pure" class="pricing-block visible">
+  <div class="note-box">All packages include IV fluids. Nevada pricing differs — Hangover $300, Hydration $150, Myers $250.</div>
+  <div class="pkg-grid">
+    <div class="pkg" data-price="130" data-name="Hydration"><div class="pkg-header"><span class="pkg-name">Hydration</span><span class="pkg-price">$130</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>IV Fluids 1L</li></ul></div>
+    <div class="pkg" data-price="150" data-name="Bronze"><div class="pkg-header"><span class="pkg-name">Bronze</span><span class="pkg-price">$150</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li></ul></div>
+    <div class="pkg" data-price="175" data-name="Silver"><div class="pkg-header"><span class="pkg-name">Silver</span><span class="pkg-price">$175</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li><li>1 targeted vitamin/medication</li></ul></div>
+    <div class="pkg" data-price="180" data-name="Gold"><div class="pkg-header"><span class="pkg-name">Gold</span><span class="pkg-price">$180</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li><li>2 targeted vitamins/medications</li></ul></div>
+    <div class="pkg" data-price="180" data-name="Kids Myers"><div class="pkg-header"><span class="pkg-name">Kids Myers</span><span class="pkg-price">$180</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium 100mg</li><li>B12 .1mL</li><li>B Complex .5mL</li><li>Vitamin C 500mg</li><li>Zinc 10mg</li><li>Glutathione 200mg</li><li>Weight-based dosing</li></ul></div>
+    <div class="pkg" data-price="210" data-name="Myers Cold Flu Immune Jet Lag"><div class="pkg-header"><span class="pkg-name">Myers / Cold & Flu / Immune / Jet Lag</span><span class="pkg-price">$210</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 2mL</li><li>Glutathione 2mL</li><li>Zinc 2mL</li><li>Magnesium 1mL</li><li>B Complex 1mL</li><li>B12 .2–.5mL</li></ul></div>
+    <div class="pkg" data-price="210" data-name="Energy Pregame"><div class="pkg-header"><span class="pkg-name">Energy + Pregame</span><span class="pkg-price">$210</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li><li>Vitamin C 2mL</li><li>B12 1mg</li><li>Amino Blend 1mL (sometimes)</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Morning Sickness"><div class="pkg-header"><span class="pkg-name">Morning Sickness</span><span class="pkg-price">$225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>LR only</li><li>B Complex 1mL</li><li>Zofran 4mg</li><li>Pepcid 20mg</li><li>Magnesium 2.5/1.6mL</li></ul></div>
+    <div class="pkg" data-price="235" data-name="Nausea Stomach Bug Food Poisoning"><div class="pkg-header"><span class="pkg-name">Nausea / Stomach Bug / Food Poisoning</span><span class="pkg-price">$235</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li><li>Zofran 4mg</li><li>Pepcid 20mg</li><li>Magnesium 2.5mL</li><li>Taurine 1mL</li></ul></div>
+    <div class="pkg" data-price="235" data-name="Athletic Performance Recovery"><div class="pkg-header"><span class="pkg-name">Athletic Performance + Recovery</span><span class="pkg-price">$235</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 2mL</li><li>Glutathione 2mL</li><li>Zinc 2mL</li><li>Magnesium 1mL</li><li>B Complex 1mL</li><li>B12 1mg</li><li>Amino Blend 2mL</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Altitude Sickness"><div class="pkg-header"><span class="pkg-name">Altitude Sickness</span><span class="pkg-price">$250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 2mL</li><li>Glutathione 2mL</li><li>Zinc 2mL</li><li>Magnesium 1mL</li><li>B Complex 1mL</li><li>B12 1mL</li><li>Dexamethasone 4mg</li><li>Zofran 4mg</li><li>Toradol 10mg</li></ul></div>
+    <div class="pkg" data-price="255" data-name="Beauty"><div class="pkg-header"><span class="pkg-name">Beauty</span><span class="pkg-price">$255</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B12 1mg</li><li>NAD+ 1mL</li><li>Biotin 1mL</li></ul></div>
+    <div class="pkg" data-price="275" data-name="Hangover"><div class="pkg-header"><span class="pkg-name">Hangover</span><span class="pkg-price">$275</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li><li>B12 .2mL</li><li>Glutathione 2mL</li><li>Toradol 10mg</li><li>Zofran 4mg</li><li>Pepcid 20mg</li></ul></div>
+    <div class="pkg" data-price="285" data-name="Headache Migraine"><div class="pkg-header"><span class="pkg-name">Headache + Migraine</span><span class="pkg-price">$285</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li><li>Zofran 4mg</li><li>Toradol 10mg</li><li>Magnesium 2.5mL</li><li>Benadryl 25mg</li><li>Dexamethasone 4mg</li><li>Amino Blend 2mL</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Extreme Nausea GLP1"><div class="pkg-header"><span class="pkg-name">Extreme Nausea / GLP-1 Sickness</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 1mL</li><li>Zofran 4mg</li><li>Reglan 5mg</li><li>Benadryl 25mg</li><li>Pepcid 20mg</li><li>Magnesium 500mg</li></ul></div>
+    <div class="pkg" data-price="325" data-name="Mega Myers"><div class="pkg-header"><span class="pkg-name">Mega Myers</span><span class="pkg-price">$325</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 10mL</li><li>Glutathione 5mL</li><li>Zinc 4mL</li><li>Magnesium 2.5mL</li><li>B Complex 1mL</li><li>B12 .2mL</li></ul></div>
+    <div class="pkg" data-price="335" data-name="Anti-Inflammatory"><div class="pkg-header"><span class="pkg-name">Anti-Inflammatory</span><span class="pkg-price">$335</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NAC Acetylcysteine 6mL</li><li>Glutathione 5mL</li><li>Dexamethasone 4mg</li></ul></div>
+    <div class="pkg" data-price="335" data-name="Super Immune"><div class="pkg-header"><span class="pkg-name">Super Immune</span><span class="pkg-price">$335</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 10mL</li><li>Glutathione 5mL</li><li>Zinc 4mL</li><li>Magnesium 2.5mL</li><li>B Complex 1mL</li><li>B12 1mg</li><li>Amino Blend 2mL</li></ul></div>
+    <div class="pkg" data-price="405" data-name="Megalodon"><div class="pkg-header"><span class="pkg-name">Megalodon</span><span class="pkg-price">$405</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 50mL (25g)</li><li>Glutathione 5mL</li><li>Zinc 4mL</li><li>Magnesium 2.5mL</li><li>B Complex 1mL</li><li>B12 1mL</li></ul></div>
+    <div class="pkg" data-price="405" data-name="Platinum Jackpot"><div class="pkg-header"><span class="pkg-name">Platinum + Jackpot</span><span class="pkg-price">$405</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 10mL</li><li>Glutathione 5mL</li><li>Zinc 4mL</li><li>Magnesium 2.5mL</li><li>B Complex 1mL</li><li>B12 .2mL</li><li>Taurine 2mL</li><li>Amino Blend 2mL</li></ul></div>
+    <div class="pkg" data-price="600" data-name="High Rollers"><div class="pkg-header"><span class="pkg-name">High Rollers</span><span class="pkg-price">$600</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 10mL</li><li>Glutathione 7.5mL</li><li>Zinc 4mL</li><li>Magnesium 2.5mL</li><li>B Complex 1mL</li><li>B12 .2mL</li><li>Taurine 2mL</li><li>Amino Blend 2mL</li><li>NAC 6mL or Glutathione 2.5mL</li></ul></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons</h4><div class="addon-grid"><span class="addon-pill">Add-ons $30</span><span class="addon-pill">IM shots $35 (min $100 standalone)</span><span class="addon-pill">NAC add-in $80–$155</span><span class="addon-pill">NAD $1/mg</span></div></div>
+</div>
+
+<!-- ELITE -->
+<div id="block-elite" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="249" data-name="Hydration Bag"><div class="pkg-header"><span class="pkg-name">Hydration Bag</span><span class="pkg-price">$249</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>1L NS or LR</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myers Cocktail</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vita Complex 1–3mL</li><li>Mineral Blend 1–3mL</li><li>Ascorbic Acid 1–3mL</li></ul></div>
+    <div class="pkg" data-price="349" data-name="Super Immunity Hangover Energy"><div class="pkg-header"><span class="pkg-name">Super Immunity / Hangover / Energy</span><span class="pkg-price">$349</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vita Complex 1–3mL</li><li>Mineral Blend 1–3mL</li><li>Ascorbic Acid 1–3mL</li><li>Taurine 1–2mL IV push</li><li>Zofran 4mg ×2 PRN</li><li>Toradol 15mg PRN</li></ul></div>
+    <div class="pkg" data-price="449" data-name="Upgraded Package"><div class="pkg-header"><span class="pkg-name">Upgraded Package</span><span class="pkg-price">$449</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vita Complex 2–3mL</li><li>Mineral Blend 2–3mL</li><li>Ascorbic Acid 2–3mL</li><li>Taurine IV push · Zofran · Toradol</li><li>Glutathione 200–400mg</li><li>Methylcobalamin 1mL</li></ul></div>
+    <div class="pkg" data-price="50" data-name="NAD IM 50mg"><div class="pkg-header"><span class="pkg-name">NAD+ IM/SubQ 50mg</span><span class="pkg-price">$50</span></div></div>
+    <div class="pkg" data-price="100" data-name="NAD IM 100mg"><div class="pkg-header"><span class="pkg-name">NAD+ IM/SubQ 100mg</span><span class="pkg-price">$100</span></div></div>
+    <div class="pkg" data-price="599" data-name="NAD 250mg Infusion"><div class="pkg-header"><span class="pkg-name">NAD+ 250mg Infusion</span><span class="pkg-price">$599</span></div></div>
+    <div class="pkg" data-price="799" data-name="NAD 500mg Infusion"><div class="pkg-header"><span class="pkg-name">NAD+ 500mg Infusion</span><span class="pkg-price">$799</span></div></div>
+    <div class="pkg" data-price="2200" data-name="NAD 4x500mg"><div class="pkg-header"><span class="pkg-name">4× NAD+ 500mg Package</span><span class="pkg-price">$2,200</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>$550/session</li></ul></div>
+    <div class="pkg" data-price="1600" data-name="High Dose Vit C 4x50g"><div class="pkg-header"><span class="pkg-name">High Dose Vit C — 4×50g</span><span class="pkg-price">$1,600</span></div></div>
+    <div class="pkg" data-price="3200" data-name="High Dose Vit C 8x50g"><div class="pkg-header"><span class="pkg-name">High Dose Vit C — 8×50g</span><span class="pkg-price">$3,200</span></div></div>
+    <div class="pkg" data-price="79" data-name="Extra 500mL"><div class="pkg-header"><span class="pkg-name">Extra 500mL NS/LR</span><span class="pkg-price">$79</span></div></div>
+    <div class="pkg" data-price="149" data-name="Extra 1L"><div class="pkg-header"><span class="pkg-name">Extra 1L NS/LR</span><span class="pkg-price">$149</span></div></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons — $30</h4><div class="addon-grid"><span class="addon-pill">Zofran</span><span class="addon-pill">Toradol</span><span class="addon-pill">Taurine IV push</span><span class="addon-pill">Ascorbic Acid</span><span class="addon-pill">Mineral Blend</span><span class="addon-pill">Vita Complex</span><span class="addon-pill">Methylcobalamin SubQ/IM</span></div><h4 style="margin-top:16px">Add-Ons — $50</h4><div class="addon-grid" style="margin-top:10px"><span class="addon-pill">Glutathione 200–400mg IV push</span><span class="addon-pill">Vitamin D 50,000 IU IM</span></div></div>
+</div>
+
+<!-- MIKES -->
+<div id="block-mikes" class="pricing-block">
+  <div class="note-box">For weight loss program inquiries, PM Mike with patient info so he can follow up directly.</div>
+  <div class="pkg-grid">
+    <div class="pkg" data-price="125" data-name="Dehydration 500mL"><div class="pkg-header"><span class="pkg-name">Dehydration 500mL</span><span class="pkg-price">$125</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS or LR</li></ul></div>
+    <div class="pkg" data-price="150" data-name="Dehydration 1000mL"><div class="pkg-header"><span class="pkg-name">Dehydration 1,000mL</span><span class="pkg-price">$150</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS or LR</li></ul></div>
+    <div class="pkg" data-price="175" data-name="Myers Essentials"><div class="pkg-header"><span class="pkg-name">Myer's Essentials</span><span class="pkg-price">$175</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · B Complex · B12 · Zinc · Glutathione · Chloride Combo · Trace Elements</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Myers Plus"><div class="pkg-header"><span class="pkg-name">Myer's Plus</span><span class="pkg-price">$250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · B Complex · B12 · Zinc</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Immunity"><div class="pkg-header"><span class="pkg-name">Immunity</span><span class="pkg-price">$250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · Zinc</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Allergy"><div class="pkg-header"><span class="pkg-name">Allergy</span><span class="pkg-price">$250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · B Complex · Glutamine · Alpha Lipoic Acid · Glutathione · Benadryl · Toradol · Pepcid</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Morning Sickness"><div class="pkg-header"><span class="pkg-name">Morning Sickness+</span><span class="pkg-price">$250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Benadryl · Pepcid · B Complex · Magnesium</li></ul></div>
+    <div class="pkg" data-price="275" data-name="Beautiful"><div class="pkg-header"><span class="pkg-name">Beautiful</span><span class="pkg-price">$275</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · B Complex · Biotin · Zinc · Glutathione</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Myers Enhanced"><div class="pkg-header"><span class="pkg-name">Myer's Enhanced</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · B Complex · B12 · Zinc · Glutathione · Chloride Combo · Trace Elements</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Performance"><div class="pkg-header"><span class="pkg-name">Performance</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · B Complex · B12 · Carnitine · Arginine · Glutamine · Amino Blend · Glutathione</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Pregnancy Glow"><div class="pkg-header"><span class="pkg-name">Pregnancy Glow</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex · Magnesium · Vitamin C · Glutathione · B12 · Zinc</li></ul></div>
+    <div class="pkg" data-price="350" data-name="Revival"><div class="pkg-header"><span class="pkg-name">Revival</span><span class="pkg-price">$350</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · B Complex · B12 · Zinc · Glutathione · Toradol · Zofran · Pepcid · Benadryl</li></ul></div>
+    <div class="pkg" data-price="350" data-name="Limitless"><div class="pkg-header"><span class="pkg-name">Limitless</span><span class="pkg-price">$350</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · B Complex · B12 · Zinc · Glutathione · Arginine · Carnitine · Biotin · NAD+</li></ul></div>
+    <div class="pkg" data-price="599" data-name="Ultimate"><div class="pkg-header"><span class="pkg-name">Ultimate</span><span class="pkg-price">$599</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Magnesium · B Complex · B12 · Zinc · Glutathione · Arginine · Carnitine · Biotin · Amino Blend · NAD+</li><li>Toradol · Zofran · Benadryl · Pepcid</li></ul></div>
+    <div class="pkg" data-price="99" data-name="Prime Package"><div class="pkg-header"><span class="pkg-name">Prime Package</span><span class="pkg-price">$99 + add-ons</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Base $99 + 3 add-ons ($90 total)</li></ul></div>
+    <div class="pkg" data-price="100" data-name="NAD+"><div class="pkg-header"><span class="pkg-name">NAD+</span><span class="pkg-price">$100–$599</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>100mg $100 · 250mg $250 · 500mg $399 · 750mg $499 · 1,000mg $599</li></ul></div>
+    <div class="pkg" data-price="200" data-name="High Dose Vitamin C"><div class="pkg-header"><span class="pkg-name">High-Dose Vitamin C</span><span class="pkg-price">$200–$400</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>10g · 25g · 50g · 75g · 100g</li></ul></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons</h4><div class="addon-grid"><span class="addon-pill">Standard add-ons $30</span><span class="addon-pill">Additional 1L NS $60</span><span class="addon-pill">Glutathione push 600mg $30 → 2,000mg $100</span></div></div>
+</div>
+
+<!-- ELEVATE -->
+<div id="block-elevate" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="165" data-name="The Bounce Back"><div class="pkg-header"><span class="pkg-name">The Bounce Back</span><span class="pkg-price">$165</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Zofran 4mg · Toradol 30mg · B12 2000mcg · B Complex 1mL</li></ul></div>
+    <div class="pkg" data-price="176" data-name="The Mountaineer Myers"><div class="pkg-header"><span class="pkg-name">The Mountaineer Myers</span><span class="pkg-price">$176</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione 500mg · B Complex 1mL · B12 2000mcg · Vitamin C 1000mg · Zinc 4mg · Magnesium 500mg</li></ul></div>
+    <div class="pkg" data-price="188" data-name="The Migraine Melt"><div class="pkg-header"><span class="pkg-name">The Migraine Melt</span><span class="pkg-price">$188</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Toradol 30mg · Zofran 4mg · Benadryl 25mg · B Complex 1mL · Magnesium 1000mg</li></ul></div>
+    <div class="pkg" data-price="198" data-name="The Monthly Reset"><div class="pkg-header"><span class="pkg-name">The Monthly Reset</span><span class="pkg-price">$198</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Toradol 30mg · Zofran 4mg · Magnesium 1000mg · Zinc 4mg · B Complex 1mL · B12 1000mcg</li></ul></div>
+    <div class="pkg" data-price="199" data-name="The Pre-Game Kickoff"><div class="pkg-header"><span class="pkg-name">The Pre-Game Kickoff</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 3mL · B12 5000mcg · Amino Blend 3mL</li></ul></div>
+    <div class="pkg" data-price="249" data-name="The Recovery Cooldown"><div class="pkg-header"><span class="pkg-name">The Recovery Cooldown</span><span class="pkg-price">$249</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex 3mL · B12 5000mcg · Taurine 500mg · Glutathione 1000mg · Magnesium 500mg · Amino Blend 3mL</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Cold Flu"><div class="pkg-header"><span class="pkg-name">Cold & Flu</span><span class="pkg-price">$250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione 800mg · B Complex 1mL · B12 2000mcg · Zinc 10mg · Vitamin C 5000mg</li></ul></div>
+    <div class="pkg" data-price="285" data-name="The Wild Wonderful"><div class="pkg-header"><span class="pkg-name">The Wild & Wonderful</span><span class="pkg-price">$285</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione 2000mcg · B Complex 3mL · B12 2500mcg · Vitamin C 10,000mcg · Zinc 10mg · Magnesium 500mg</li></ul></div>
+    <div class="pkg" data-price="335" data-name="The Almost Heaven"><div class="pkg-header"><span class="pkg-name">The Almost Heaven</span><span class="pkg-price">$335</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione 2000mg · B Complex 3mL · B12 2500mcg · Vitamin C 20,000mg · Zinc 10mg · Magnesium 500mg</li></ul></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons</h4><div class="addon-grid"><span class="addon-pill">Amino Blend $40</span><span class="addon-pill">B12 $5</span><span class="addon-pill">B Complex $10</span><span class="addon-pill">Benadryl $25</span><span class="addon-pill">Decadron $25</span><span class="addon-pill">Glutathione $12</span><span class="addon-pill">Magnesium $25</span><span class="addon-pill">NAD 50mg $50</span><span class="addon-pill">NAD 100mg $100</span><span class="addon-pill">NAD 200mg $200</span><span class="addon-pill">Pepcid $12</span><span class="addon-pill">Taurine $25</span><span class="addon-pill">Toradol $13–$25</span><span class="addon-pill">Tri-Immune $25</span><span class="addon-pill">Vit C 1000mg $12</span><span class="addon-pill">Zinc $13</span><span class="addon-pill">Zofran $25</span></div></div>
+</div>
+
+<!-- BLISS -->
+<div id="block-bliss" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="130" data-name="Fluid Boost"><div class="pkg-header"><span class="pkg-name">Fluid Boost</span><span class="pkg-price">$130</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Normal Saline 1,000mL</li></ul></div>
+    <div class="pkg" data-price="149" data-name="Starter Package"><div class="pkg-header"><span class="pkg-name">Starter Package</span><span class="pkg-price">$149</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Normal Saline 1,000mL · Choice of 1 add-on</li></ul></div>
+    <div class="pkg" data-price="175" data-name="Premium Package"><div class="pkg-header"><span class="pkg-name">Premium Package</span><span class="pkg-price">$175</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Normal Saline 1,000mL · Choice of 2 add-ons</li></ul></div>
+    <div class="pkg" data-price="199" data-name="Elite Package"><div class="pkg-header"><span class="pkg-name">Elite Package</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Normal Saline 1,000mL · Choice of 3 add-ons</li></ul></div>
+    <div class="pkg" data-price="210" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myers Cocktail</span><span class="pkg-price">$210</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium Chloride · B-Complex · Hydroxo B12 · Calcium Gluconate · Ascorbic Acid</li></ul></div>
+    <div class="pkg" data-price="210" data-name="Immunity"><div class="pkg-header"><span class="pkg-name">Immunity</span><span class="pkg-price">$210</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B-Complex · Zinc Sulfate</li></ul></div>
+    <div class="pkg" data-price="235" data-name="Athlete Boost"><div class="pkg-header"><span class="pkg-name">Athlete Boost</span><span class="pkg-price">$235</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B-Complex · Amino Acids · Minerals</li></ul></div>
+    <div class="pkg" data-price="249" data-name="Altitude Sickness"><div class="pkg-header"><span class="pkg-name">Altitude Sickness</span><span class="pkg-price">$249</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Support for high elevation symptoms</li></ul></div>
+    <div class="pkg" data-price="249" data-name="Hangover"><div class="pkg-header"><span class="pkg-name">Hangover</span><span class="pkg-price">$249</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ondansetron · B-Complex · Minerals</li></ul></div>
+    <div class="pkg" data-price="249" data-name="Super Detox"><div class="pkg-header"><span class="pkg-name">Super Detox</span><span class="pkg-price">$249</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Glutathione · Magnesium · Essential Vitamins & Minerals</li></ul></div>
+    <div class="pkg" data-price="255" data-name="Migraine"><div class="pkg-header"><span class="pkg-name">Migraine</span><span class="pkg-price">$255</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium · Zinc · Ondansetron · Benadryl · Toradol</li></ul></div>
+    <div class="pkg" data-price="275" data-name="Radiance"><div class="pkg-header"><span class="pkg-name">Radiance</span><span class="pkg-price">$275</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NAD+ · Glutathione · Biotin</li></ul></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons</h4><div class="addon-grid"><span class="addon-pill">NAD $1/mg (25–1,000mg)</span><span class="addon-pill">B12 $30</span><span class="addon-pill">Vitamin D $30</span><span class="addon-pill">Glutathione $30</span><span class="addon-pill">Other $30</span><span class="addon-pill">Additional NS bag $60</span></div></div>
+</div>
+
+<!-- ZEN -->
+<div id="block-zen" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="229" data-name="Hydration"><div class="pkg-header"><span class="pkg-name">Hydration</span><span class="pkg-price">$229</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS or LR · Magnesium · B Complex</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myers Cocktail</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 2mL · Glutathione 2mL · Zinc 1mL · Magnesium 1mL · B Complex 1mL · B12</li></ul></div>
+    <div class="pkg" data-price="349" data-name="Hangover"><div class="pkg-header"><span class="pkg-name">Hangover</span><span class="pkg-price">$349</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex · B12 · Glutathione · Anti-Pain · Anti-Nausea · Anti-Heartburn</li></ul></div>
+    <div class="pkg" data-price="349" data-name="Migraine"><div class="pkg-header"><span class="pkg-name">Migraine</span><span class="pkg-price">$349</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex · B12 · Magnesium · Anti-Pain · Anti-Nausea · Anti-Inflammation</li></ul></div>
+    <div class="pkg" data-price="349" data-name="Weight Loss"><div class="pkg-header"><span class="pkg-name">Weight Loss</span><span class="pkg-price">$349</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium · B Complex · NAD+ · B12</li></ul></div>
+    <div class="pkg" data-price="399" data-name="Mega Myers"><div class="pkg-header"><span class="pkg-name">Mega Myers</span><span class="pkg-price">$399</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Glutathione · Zinc · Magnesium · B Complex · B12</li></ul></div>
+    <div class="pkg" data-price="399" data-name="Zen Cocktail"><div class="pkg-header"><span class="pkg-name">Zen Cocktail</span><span class="pkg-price">$399</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium · B Complex · B12 · Aminos · NAD+</li></ul></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ins</h4><div class="addon-grid"><span class="addon-pill">Basic IV add-in $35</span><span class="addon-pill">Basic IM shot $35</span><span class="addon-pill">NAD $1/mg</span></div></div>
+</div>
+
+<!-- PEACH -->
+<div id="block-peach" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="235" data-name="Hydration IV"><div class="pkg-header"><span class="pkg-name">Hydration IV</span><span class="pkg-price">$235</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Normal Saline 1,000mL</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myers Cocktail</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium · Calcium Chloride · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Hangover"><div class="pkg-header"><span class="pkg-name">Hangover</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-nausea · Anti-pain · Anti-acid · Vitamin C · B12</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Food Poisoning"><div class="pkg-header"><span class="pkg-name">Food Poisoning</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium · Anti-nausea ×2 · Anti-pain · Anti-acid</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Migraine Headache Basic"><div class="pkg-header"><span class="pkg-name">Migraine & Headache Basic</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-pain ×2 · Diphenhydramine · Magnesium (high dose)</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Menstrual Relief"><div class="pkg-header"><span class="pkg-name">Menstrual Relief</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-pain/fever ×2 · Anti-acid · Folate · Biotin · Magnesium · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Immunity Boost"><div class="pkg-header"><span class="pkg-name">Immunity Boost</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Zinc (high) · Magnesium · Calcium Gluconate · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Fever Flu Basic"><div class="pkg-header"><span class="pkg-name">Fever & Flu Basic</span><span class="pkg-price">$295</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-pain/fever · Anti-histamine · Zinc · Vitamin C</li></ul></div>
+    <div class="pkg" data-price="295" data-name="Glutathione 1000mg"><div class="pkg-header"><span class="pkg-name">Glutathione 1,000mg</span><span class="pkg-price">$295</span></div></div>
+    <div class="pkg" data-price="325" data-name="Stress Relief"><div class="pkg-header"><span class="pkg-name">Stress Relief</span><span class="pkg-price">$325</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Zinc · Magnesium · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="325" data-name="Athletic Boost Basic"><div class="pkg-header"><span class="pkg-name">Athletic Boost Basic</span><span class="pkg-price">$325</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Bi-Amino Blend · Lipo-C · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="335" data-name="Jet Lag Recovery"><div class="pkg-header"><span class="pkg-name">Jet Lag Recovery</span><span class="pkg-price">$335</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-nausea · Anti-pain · Vitamin C · B12 · B Complex · Magnesium · Calcium Gluconate</li></ul></div>
+    <div class="pkg" data-price="345" data-name="Hangover Deluxe"><div class="pkg-header"><span class="pkg-name">Hangover Deluxe</span><span class="pkg-price">$345</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-nausea ×2 · Anti-pain ×2 · Anti-acid · Vitamin C · B12 · B Complex · Magnesium · Calcium Gluconate</li></ul></div>
+    <div class="pkg" data-price="345" data-name="Pregnancy Support"><div class="pkg-header"><span class="pkg-name">Pregnancy Support</span><span class="pkg-price">$345</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-nausea · Folate · Biotin · Magnesium · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="345" data-name="Beauty Basic"><div class="pkg-header"><span class="pkg-name">Beauty Basic</span><span class="pkg-price">$345</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Biotin (high) · Vitamin C · B Complex · Glutathione</li></ul></div>
+    <div class="pkg" data-price="345" data-name="Allergy Relief"><div class="pkg-header"><span class="pkg-name">Allergy Relief</span><span class="pkg-price">$345</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-allergy ×2 · Anti-acid · Anti-fever · Zinc (high) · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="345" data-name="Detox"><div class="pkg-header"><span class="pkg-name">Detox</span><span class="pkg-price">$345</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione 600mg · Zinc · Magnesium · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="345" data-name="Energy Focus Basic"><div class="pkg-header"><span class="pkg-name">Energy & Focus Basic</span><span class="pkg-price">$345</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione 600mg · Zinc · B Complex · Vitamin C · B12</li></ul></div>
+    <div class="pkg" data-price="355" data-name="Skin Glow"><div class="pkg-header"><span class="pkg-name">Skin Glow</span><span class="pkg-price">$355</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 5,000mg · Glutathione 1,000mg</li></ul></div>
+    <div class="pkg" data-price="355" data-name="Menstrual Relief Deluxe"><div class="pkg-header"><span class="pkg-name">Menstrual Relief Deluxe</span><span class="pkg-price">$355</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-pain/fever ×2 · Anti-acid · Folate · Magnesium · Calcium Gluconate · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="365" data-name="Food Poisoning Deluxe"><div class="pkg-header"><span class="pkg-name">Food Poisoning Deluxe</span><span class="pkg-price">$365</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-nausea ×2 · Anti-pain ×2 · Anti-acid ×2 · Zinc · Magnesium · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="365" data-name="Migraine Headache Deluxe"><div class="pkg-header"><span class="pkg-name">Migraine & Headache Deluxe</span><span class="pkg-price">$365</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-pain ×2–4 · Anti-nausea · Anti-acid · Diphenhydramine ×2 · Magnesium (high) · Vitamin C · B12 · B Complex · Calcium Chloride</li></ul></div>
+    <div class="pkg" data-price="365" data-name="Immunity Boost Deluxe"><div class="pkg-header"><span class="pkg-name">Immunity Boost Deluxe</span><span class="pkg-price">$365</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione · Zinc (very high) · Magnesium · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="365" data-name="Fever Flu Deluxe"><div class="pkg-header"><span class="pkg-name">Fever & Flu Deluxe</span><span class="pkg-price">$365</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Anti-pain/fever ×2 · Anti-acid · Anti-histamine · Zinc (high) · Magnesium · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="365" data-name="Athletic Boost Deluxe"><div class="pkg-header"><span class="pkg-name">Athletic Boost Deluxe</span><span class="pkg-price">$365</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Bi-Amino Blend · Lipo-C · Glutathione · Zinc · Magnesium · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="365" data-name="Glutathione 2000mg"><div class="pkg-header"><span class="pkg-name">Glutathione 2,000mg</span><span class="pkg-price">$365</span></div></div>
+    <div class="pkg" data-price="395" data-name="Beauty Deluxe"><div class="pkg-header"><span class="pkg-name">Beauty Deluxe</span><span class="pkg-price">$395</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Glutathione · Biotin (high) · Magnesium · Folate · Calcium Gluconate · Vitamin C · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="495" data-name="Skin Glow Deluxe"><div class="pkg-header"><span class="pkg-name">Skin Glow Deluxe</span><span class="pkg-price">$495</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C 10,000mg · Glutathione 2,000mg</li></ul></div>
+    <div class="pkg" data-price="495" data-name="Energy Focus Deluxe"><div class="pkg-header"><span class="pkg-name">Energy & Focus Deluxe</span><span class="pkg-price">$495</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NAD+ 100mg · Glutathione 600mg · Zinc · Magnesium · B12 · B Complex</li></ul></div>
+    <div class="pkg" data-price="495" data-name="Anti-Aging"><div class="pkg-header"><span class="pkg-name">Anti-Aging</span><span class="pkg-price">$495</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NAD+ 100mg · Glutathione 600mg · Zinc · Folate · Biotin · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="495" data-name="NAD 200mg"><div class="pkg-header"><span class="pkg-name">NAD+ 200mg</span><span class="pkg-price">$495</span></div></div>
+    <div class="pkg" data-price="695" data-name="NAD 500mg"><div class="pkg-header"><span class="pkg-name">NAD+ 500mg</span><span class="pkg-price">$695</span></div></div>
+    <div class="pkg" data-price="695" data-name="Iron Infusions"><div class="pkg-header"><span class="pkg-name">Iron Infusions</span><span class="pkg-price">$695</span></div></div>
+  </div>
+  <div class="addon-section"><h4>Membership — $19.95/mo or $195/yr</h4><div class="addon-grid"><span class="addon-pill">10% off IVs</span><span class="addon-pill">$30 add-on credit per visit</span><span class="addon-pill">$50 off one NAD/mo</span><span class="addon-pill">Late cancel waived to 1hr prior</span><span class="addon-pill">No initiation or cancellation fee</span><span class="addon-pill">Min 3-month initial term (monthly)</span></div></div>
+</div>
+
+<!-- RECOVERIE NYC -->
+<div id="block-recoverie" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="249" data-name="Personalized IV"><div class="pkg-header"><span class="pkg-name">Personalized IV</span><span class="pkg-price">$249</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>2 foundation ingredients OR 1 premium ingredient</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Nausea"><div class="pkg-header"><span class="pkg-name">Nausea</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex · Magnesium · Taurine · Nausea medication</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Hangover"><div class="pkg-header"><span class="pkg-name">Hangover</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Vitamins · Glutathione · Pain medication · Nausea medication</li></ul></div>
+    <div class="pkg" data-price="325" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myers Cocktail</span><span class="pkg-price">$325</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Vitamins · Vitamin C · Glutathione · Zinc · Magnesium · B12</li></ul></div>
+    <div class="pkg" data-price="325" data-name="Immune Support"><div class="pkg-header"><span class="pkg-name">Immune Support</span><span class="pkg-price">$325</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Vitamins · Vitamin C · Glutathione · Zinc · Magnesium</li></ul></div>
+    <div class="pkg" data-price="325" data-name="Migraine"><div class="pkg-header"><span class="pkg-name">Migraine</span><span class="pkg-price">$325</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B Complex · Magnesium · Amino Blend · Pain medication · Anti-nausea medication</li></ul></div>
+    <div class="pkg" data-price="399" data-name="Mega Myers"><div class="pkg-header"><span class="pkg-name">Mega Myers</span><span class="pkg-price">$399</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Glutathione · Zinc · Magnesium · B Complex · B12</li></ul></div>
+    <div class="pkg" data-price="399" data-name="Cold Flu"><div class="pkg-header"><span class="pkg-name">Cold/Flu</span><span class="pkg-price">$399</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Glutathione · Zinc · Magnesium · B Complex · B12</li></ul></div>
+    <div class="pkg" data-price="449" data-name="Recoverie Cocktail"><div class="pkg-header"><span class="pkg-name">Recoverie Cocktail</span><span class="pkg-price">$449</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium · B Complex · B12 · Aminos · NAD+</li></ul></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons</h4><div class="addon-grid"><span class="addon-pill">NAD $1/mg (25–1,000mg)</span><span class="addon-pill">B12 $40</span><span class="addon-pill">Vitamin D $40</span><span class="addon-pill">Glutathione $40</span><span class="addon-pill">Other $40</span><span class="addon-pill">Additional NS bag $70</span></div></div>
+</div>
+
+<!-- MY IV SPA -->
+<div id="block-myiv" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="199" data-name="Vital C Drip 5g"><div class="pkg-header"><span class="pkg-name">Vital C Drip 5g</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid 5g/10mL</li></ul></div>
+    <div class="pkg" data-price="229" data-name="Vital C Drip 10g"><div class="pkg-header"><span class="pkg-name">Vital C Drip 10g</span><span class="pkg-price">$229</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid 10g/20mL</li></ul></div>
+    <div class="pkg" data-price="229" data-name="H2O Harmony"><div class="pkg-header"><span class="pkg-name">H2O Harmony</span><span class="pkg-price">$229</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Sodium Chloride</li></ul></div>
+    <div class="pkg" data-price="289" data-name="Focus Infusion"><div class="pkg-header"><span class="pkg-name">Focus Infusion</span><span class="pkg-price">$289</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Taurine · Alpha-Lipoic Acid · Magnesium</li></ul></div>
+    <div class="pkg" data-price="289" data-name="Detox Hangover"><div class="pkg-header"><span class="pkg-name">Detox (Hangover)</span><span class="pkg-price">$289</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Amino Blend · Glutathione · Magnesium</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Athletes Edge"><div class="pkg-header"><span class="pkg-name">Athlete's Edge</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Amino Blend · Taurine · Magnesium</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Vital Burn"><div class="pkg-header"><span class="pkg-name">Vital Burn (Metabolism)</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Taurine · L-Carnitine</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Hormone Harmony"><div class="pkg-header"><span class="pkg-name">Hormone Harmony</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium · Glutathione · B12</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Migraine Cocktail"><div class="pkg-header"><span class="pkg-name">Migraine Cocktail</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium Chloride · Calcium Chloride · B12</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Radiant You"><div class="pkg-header"><span class="pkg-name">Radiant You</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Ascorbic Acid · Glutathione · Biotin</li></ul></div>
+    <div class="pkg" data-price="319" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myer's Cocktail</span><span class="pkg-price">$319</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Ascorbic Acid · Calcium · Magnesium · B12</li></ul></div>
+    <div class="pkg" data-price="319" data-name="Viral Guard Cold Flu"><div class="pkg-header"><span class="pkg-name">Viral Guard (Cold & Flu)</span><span class="pkg-price">$319</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B-Complex · Zinc · Magnesium</li></ul></div>
+    <div class="pkg" data-price="329" data-name="Anti-Inflammatory"><div class="pkg-header"><span class="pkg-name">Anti-Inflammatory</span><span class="pkg-price">$329</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium · Alpha-Lipoic Acid · B12</li></ul></div>
+    <div class="pkg" data-price="369" data-name="Methylene Blue"><div class="pkg-header"><span class="pkg-name">Methylene Blue</span><span class="pkg-price">$369</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Methylene Blue (DPR)</li></ul></div>
+    <div class="pkg" data-price="399" data-name="NAD 250mg"><div class="pkg-header"><span class="pkg-name">NAD+ 250mg</span><span class="pkg-price">$399</span></div></div>
+    <div class="pkg" data-price="699" data-name="NAD 500mg"><div class="pkg-header"><span class="pkg-name">NAD+ 500mg</span><span class="pkg-price">$699</span></div></div>
+  </div>
+</div>
+
+<!-- PLATINUM IV -->
+<div id="block-platinum" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="125" data-name="Simply Fluids"><div class="pkg-header"><span class="pkg-name">Simply Fluids</span><span class="pkg-price">Mobile $150 · Clinic $125</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>1,000cc Saline or Lactated Ringer's</li></ul></div>
+    <div class="pkg" data-price="180" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myer's Cocktail</span><span class="pkg-price">Mobile $210 · Clinic $180</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Glutathione</li></ul></div>
+    <div class="pkg" data-price="199" data-name="NAD Infusion"><div class="pkg-header"><span class="pkg-name">NAD+ Infusion</span><span class="pkg-price">$199+</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NAD+</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Allergy Relief"><div class="pkg-header"><span class="pkg-name">Allergy Relief</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · NAC · Dexamethasone · Benadryl · Magnesium Chloride</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Alleviate PMS Relief"><div class="pkg-header"><span class="pkg-name">Alleviate PMS Relief</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Pain Relief · Magnesium Chloride · B-Complex · B12</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Immunity"><div class="pkg-header"><span class="pkg-name">Immunity</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Zinc Chloride · B-Complex · B12 · NAC · Vitamin C</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Inner Beauty"><div class="pkg-header"><span class="pkg-name">Inner Beauty</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B Complex · NAD+</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Migraine Relief"><div class="pkg-header"><span class="pkg-name">Migraine Relief</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Pain Medication · Nausea Medication · Magnesium Chloride · Dexamethasone</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Reboot Hangover"><div class="pkg-header"><span class="pkg-name">Reboot Hangover</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Anti-Nausea · Glutathione · Pain Relief</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Loaded Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Loaded Myer's Cocktail</span><span class="pkg-price">Mobile $299 · Clinic $250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Glutathione</li></ul></div>
+    <div class="pkg" data-price="335" data-name="Performance Recovery"><div class="pkg-header"><span class="pkg-name">Performance & Recovery</span><span class="pkg-price">Mobile $369 · Clinic $335</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · B Complex · Amino Blend · Magnesium Chloride · B12</li></ul></div>
+    <div class="pkg" data-price="360" data-name="Platinum Wellness"><div class="pkg-header"><span class="pkg-name">Platinum Wellness</span><span class="pkg-price">Mobile $399 · Clinic $360</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Zinc · Glutathione · NAD+ · Amino Blend</li></ul></div>
+    <div class="pkg" data-price="159" data-name="High Dose Vitamin C"><div class="pkg-header"><span class="pkg-name">High Dose Vitamin C</span><span class="pkg-price">$159–$409</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Available in 3g, 5g, 8g, and 10g doses</li></ul></div>
+  </div>
+  <div class="addon-section">
+    <h4>Add-Ons — $25 Each</h4>
+    <div class="addon-grid"><span class="addon-pill">NAC</span><span class="addon-pill">Anti-Nausea Medication</span><span class="addon-pill">Amino Blend</span><span class="addon-pill">Ascorbic Acid</span><span class="addon-pill">B Complex</span><span class="addon-pill">Biotin</span><span class="addon-pill">L-Carnitine</span><span class="addon-pill">Benadryl</span><span class="addon-pill">Glutathione</span><span class="addon-pill">Magnesium</span><span class="addon-pill">Pain Relief</span><span class="addon-pill">Taurine</span></div>
+    <h4 style="margin-top:16px">Memberships</h4>
+    <div class="addon-grid" style="margin-top:10px">
+      <span class="addon-pill">Gold — $200/mo</span>
+      <span class="addon-pill">Diamond — $400/mo</span>
+      <span class="addon-pill">Platinum — $700/mo</span>
+    </div>
+  </div>
+</div>
+
+<!-- THE GOOD LIFE -->
+<div id="block-goodlife" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="139" data-name="Hydration IV"><div class="pkg-header"><span class="pkg-name">Hydration IV</span><span class="pkg-price">$139</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Electrolyte Fluids 1,000mL</li></ul></div>
+    <div class="pkg" data-price="199" data-name="Antioxidant IV"><div class="pkg-header"><span class="pkg-name">Antioxidant IV</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · Glutathione</li></ul></div>
+    <div class="pkg" data-price="199" data-name="Hangover IV"><div class="pkg-header"><span class="pkg-name">Hangover IV</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Electrolyte Fluids · Zofran or Toradol · B1–B6 · Magnesium · Zinc · Manganese · Copper · B12</li></ul></div>
+    <div class="pkg" data-price="199" data-name="Immunity IV"><div class="pkg-header"><span class="pkg-name">Immunity IV</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Electrolyte Fluids · Vitamin C · B1–B6 · B12 · Zinc</li></ul></div>
+    <div class="pkg" data-price="199" data-name="Stress Less IV"><div class="pkg-header"><span class="pkg-name">Stress Less IV</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Electrolyte Fluids · Vitamin C · Magnesium · Zinc Sulfate · Manganese Sulfate · Copper Gluconate</li></ul></div>
+    <div class="pkg" data-price="199" data-name="ReJENerate"><div class="pkg-header"><span class="pkg-name">ReJENerate</span><span class="pkg-price">$199</span></div></div>
+    <div class="pkg" data-price="199" data-name="Breezy Boost IV"><div class="pkg-header"><span class="pkg-name">Breezy Boost IV</span><span class="pkg-price">$199</span></div></div>
+    <div class="pkg" data-price="199" data-name="Morning Sickness"><div class="pkg-header"><span class="pkg-name">Morning Sickness</span><span class="pkg-price">$199</span></div></div>
+    <div class="pkg" data-price="219" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myers Cocktail</span><span class="pkg-price">$219</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Electrolyte Fluids · Magnesium Chloride · B1–B6 · B12</li></ul></div>
+    <div class="pkg" data-price="229" data-name="Recovery IV"><div class="pkg-header"><span class="pkg-name">Recovery IV</span><span class="pkg-price">$229</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Electrolyte Fluids · Vitamin C · B1–B6 · Glutamine · Arginine · Ornithine · Lysine · Citrulline · Magnesium · Zinc · Manganese · Copper</li></ul></div>
+    <div class="pkg" data-price="209" data-name="Vitamin C 15g"><div class="pkg-header"><span class="pkg-name">Vitamin C 15g</span><span class="pkg-price">$209</span></div></div>
+    <div class="pkg" data-price="249" data-name="Vitamin C 25g"><div class="pkg-header"><span class="pkg-name">Vitamin C 25g</span><span class="pkg-price">$249</span></div></div>
+    <div class="pkg" data-price="349" data-name="Vitamin C 50g"><div class="pkg-header"><span class="pkg-name">Vitamin C 50g</span><span class="pkg-price">$349</span></div></div>
+    <div class="pkg" data-price="449" data-name="Vitamin C 75g"><div class="pkg-header"><span class="pkg-name">Vitamin C 75g</span><span class="pkg-price">$449</span></div></div>
+    <div class="pkg" data-price="50" data-name="NAD 50mg"><div class="pkg-header"><span class="pkg-name">NAD+ 50mg</span><span class="pkg-price">$50</span></div></div>
+    <div class="pkg" data-price="100" data-name="NAD 100mg"><div class="pkg-header"><span class="pkg-name">NAD+ 100mg</span><span class="pkg-price">$100</span></div></div>
+    <div class="pkg" data-price="200" data-name="NAD 200mg"><div class="pkg-header"><span class="pkg-name">NAD+ 200mg</span><span class="pkg-price">$200</span></div></div>
+    <div class="pkg" data-price="350" data-name="NAD 400mg"><div class="pkg-header"><span class="pkg-name">NAD+ 400mg</span><span class="pkg-price">$350</span></div></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons (Most $30)</h4><div class="addon-grid"><span class="addon-pill">B12 Booster $30</span><span class="addon-pill">Biotin $30</span><span class="addon-pill">Glutathione 200mg $30 → 1000mg $70</span><span class="addon-pill">Toradol $30</span><span class="addon-pill">Zofran $30</span><span class="addon-pill">Vitamin D3 $30</span><span class="addon-pill">Lipo-MICC $30</span><span class="addon-pill">Dexamethasone $30</span><span class="addon-pill">Benadryl $30</span><span class="addon-pill">Pepcid $30</span><span class="addon-pill">BPC-157 $239</span><span class="addon-pill">CJC-1295 $279</span><span class="addon-pill">GHK-Cu $249</span><span class="addon-pill">PT-141 $279</span><span class="addon-pill">Semaglutide 10mg $475 / 25mg $775</span><span class="addon-pill">Tirzepatide 20mg $475 → 60mg $875</span><span class="addon-pill">Retatrutide 8mg $275 → 48mg $875</span></div></div>
+</div>
+
+<!-- RESET IV -->
+<div id="block-reset" class="pricing-block">
+  <div class="pkg-grid">
+    <div class="pkg" data-price="159" data-name="Hydration"><div class="pkg-header"><span class="pkg-name">Hydration</span><span class="pkg-price">$159</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Normal Saline 1,000mL</li></ul></div>
+    <div class="pkg" data-price="189" data-name="Still Spinning"><div class="pkg-header"><span class="pkg-name">Still Spinning</span><span class="pkg-price">$189</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Choice of 1: Pepcid, Toradol, or Zofran</li></ul></div>
+    <div class="pkg" data-price="199" data-name="Pre Game"><div class="pkg-header"><span class="pkg-name">Pre Game</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Vitamin B Complex</li></ul></div>
+    <div class="pkg" data-price="219" data-name="Prenatal"><div class="pkg-header"><span class="pkg-name">Prenatal</span><span class="pkg-price">$219</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Pyridoxine (B6)</li></ul></div>
+    <div class="pkg" data-price="229" data-name="Defcon 1"><div class="pkg-header"><span class="pkg-name">Defcon 1</span><span class="pkg-price">$229</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Choice of 2: Pepcid, Toradol, or Zofran</li></ul></div>
+    <div class="pkg" data-price="249" data-name="The Myers Cocktail"><div class="pkg-header"><span class="pkg-name">The Myers' Cocktail</span><span class="pkg-price">$249</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · B5 · B6 · B12 · Magnesium · Vitamin C · B Complex</li></ul></div>
+    <div class="pkg" data-price="269" data-name="Skin Rejuvenation"><div class="pkg-header"><span class="pkg-name">Skin Rejuvenation</span><span class="pkg-price">$269</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Glutathione Super Dose · Vitamin C Super Dose</li></ul></div>
+    <div class="pkg" data-price="279" data-name="Immune Boost"><div class="pkg-header"><span class="pkg-name">Immune Boost</span><span class="pkg-price">$279</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Glutathione · B Complex · Vitamin C Super Dose</li></ul></div>
+    <div class="pkg" data-price="289" data-name="Weight Loss Support"><div class="pkg-header"><span class="pkg-name">Weight Loss Support</span><span class="pkg-price">$289</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · B12 · Lipo Mino Injection (IM)</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Relaxation"><div class="pkg-header"><span class="pkg-name">Relaxation</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Magnesium · Taurine</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Food Poisoning"><div class="pkg-header"><span class="pkg-name">Food Poisoning</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Zofran</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Migraine"><div class="pkg-header"><span class="pkg-name">Migraine</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Benadryl · Prochlorperazine · Toradol</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Workout Routine Support"><div class="pkg-header"><span class="pkg-name">Workout Routine Support</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Amino Blend</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Jet Lag"><div class="pkg-header"><span class="pkg-name">Jet Lag</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Toradol · B Complex</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Sexual Health Support"><div class="pkg-header"><span class="pkg-name">Sexual Health Support</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Amino Blend · B12</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Stomach Flu"><div class="pkg-header"><span class="pkg-name">Stomach Flu</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Pepcid · Zofran</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Workout Boost"><div class="pkg-header"><span class="pkg-name">Workout Boost</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Amino Blend · B12</li></ul></div>
+    <div class="pkg" data-price="319" data-name="Cold and Flu"><div class="pkg-header"><span class="pkg-name">Cold and Flu</span><span class="pkg-price">$319</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Toradol · Vitamin C Mega Dose</li></ul></div>
+    <div class="pkg" data-price="319" data-name="Fatigued Dehydrated"><div class="pkg-header"><span class="pkg-name">Fatigued/Dehydrated</span><span class="pkg-price">$319</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Caffeine Citrate · Taurine · B12</li></ul></div>
+    <div class="pkg" data-price="329" data-name="Hair Skin Nail"><div class="pkg-header"><span class="pkg-name">Hair, Skin & Nail Strengthener</span><span class="pkg-price">$329</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Biotin · Glutathione Super Dose · Vitamin C Super Dose</li></ul></div>
+    <div class="pkg" data-price="349" data-name="The BALLER"><div class="pkg-header"><span class="pkg-name">The BALLER</span><span class="pkg-price">$349</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NS 1,000mL · Modified Myers Cocktail (B5, B6, B12, Magnesium, Vitamin C, B Complex)</li><li>Pepcid · Toradol · Zofran</li></ul></div>
+    <div class="pkg" data-price="299" data-name="NAD 100mg"><div class="pkg-header"><span class="pkg-name">NAD+ 100mg</span><span class="pkg-price">$299</span></div></div>
+    <div class="pkg" data-price="499" data-name="NAD 250mg"><div class="pkg-header"><span class="pkg-name">NAD+ 250mg</span><span class="pkg-price">$499</span></div></div>
+    <div class="pkg" data-price="699" data-name="NAD 500mg"><div class="pkg-header"><span class="pkg-name">NAD+ 500mg</span><span class="pkg-price">$699</span></div></div>
+    <div class="pkg" data-price="799" data-name="NAD 750mg"><div class="pkg-header"><span class="pkg-name">NAD+ 750mg</span><span class="pkg-price">$799</span></div></div>
+    <div class="pkg" data-price="999" data-name="NAD 1000mg"><div class="pkg-header"><span class="pkg-name">NAD+ 1,000mg</span><span class="pkg-price">$999</span></div></div>
+  </div>
+  <div class="addon-section"><h4>Add-Ons</h4><div class="addon-grid"><span class="addon-pill">AMPED (Taurine + Caffeine) $99</span><span class="addon-pill">Amino Blend $65</span><span class="addon-pill">Beautify Me $110</span><span class="addon-pill">Benadryl $65</span><span class="addon-pill">Biotin $65</span><span class="addon-pill">Caffeine Citrate $65</span><span class="addon-pill">Compazine $65</span><span class="addon-pill">Glutathione 3mL $70 · 4mL $90 · 5mL $110</span><span class="addon-pill">Lipo Mino Injection $65</span><span class="addon-pill">Magnesium $65</span><span class="addon-pill">Modified Myers Cocktail $119</span><span class="addon-pill">Additional 1L NS $65</span><span class="addon-pill">Pepcid $65</span><span class="addon-pill">Reglan $65</span><span class="addon-pill">Taurine $65</span><span class="addon-pill">Toradol $65</span><span class="addon-pill">B12 $60</span><span class="addon-pill">B5 $60</span><span class="addon-pill">B6 $60</span><span class="addon-pill">B Complex $65</span><span class="addon-pill">Vitamin C 3mL $60 · 4mL $75 · 5mL $90</span><span class="addon-pill">Zinc Sulfate 0.5mL $65 · 1mL $125</span><span class="addon-pill">Zofran $65</span></div></div>
+</div>
+
+<div class="no-results" id="noResults">No packages match your search.</div>
+
+<script>
+var favs = new Set();
+var ovMode = 'all';
+var currentTab = 'pure';
+var originalOrders = {};
+
+document.querySelectorAll('.pricing-block').forEach(function(block) {
+  var id = block.id.replace('block-', '');
+  var grid = block.querySelector('.pkg-grid');
+  if (grid) originalOrders[id] = Array.from(grid.children);
+});
+
+document.querySelectorAll('.tab').forEach(function(btn) {
+  btn.addEventListener('click', function() { switchTab(btn.dataset.target); });
+});
+
+document.querySelectorAll('.sort-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    doSort(btn.dataset.sort);
+  });
+});
+
+document.getElementById('searchInput').addEventListener('input', doSearch);
+
+document.querySelectorAll('.fav-btn').forEach(function(btn) {
+  btn.addEventListener('click', function(e) {
+    e.stopPropagation();
+    var card = btn.closest('.company-card');
+    var name = card.dataset.company;
+    if (favs.has(name)) {
+      favs.delete(name);
+      btn.classList.remove('active');
+      card.style.borderColor = '';
+    } else {
+      favs.add(name);
+      btn.classList.add('active');
+      card.style.borderColor = '#a855f7';
+    }
+    if (ovMode === 'fav') doFilterOverview('fav');
+  });
+});
+
+document.querySelectorAll('.company-card').forEach(function(card) {
+  card.addEventListener('click', function(e) {
+    if (e.target.tagName === 'A' || e.target.classList.contains('fav-btn') || e.target.closest('.fav-btn')) return;
+    var tab = card.dataset.tab;
+    if (tab) {
+      switchTab(tab);
+      document.getElementById('pricing-section').scrollIntoView({ behavior: 'smooth' });
+    }
+  });
+});
+
+document.getElementById('ovAll').addEventListener('click', function() { doFilterOverview('all'); });
+document.getElementById('ovFav').addEventListener('click', function() { doFilterOverview('fav'); });
+document.getElementById('ovAlpha').addEventListener('click', function() { doFilterOverview('alpha'); });
+
+function switchTab(target) {
+  var oldGrid = document.querySelector('#block-' + currentTab + ' .pkg-grid');
+  if (oldGrid && originalOrders[currentTab]) {
+    originalOrders[currentTab].forEach(function(pkg) {
+      pkg.classList.remove('hidden');
+      oldGrid.appendChild(pkg);
+    });
+  }
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.sort-btn').forEach(function(b) { b.classList.remove('active'); });
+  document.getElementById('noResults').style.display = 'none';
+  document.querySelectorAll('.pricing-block').forEach(function(b) { b.classList.remove('visible'); });
+  document.querySelectorAll('.tab').forEach(function(b) { b.classList.remove('active'); });
+  var block = document.getElementById('block-' + target);
+  if (block) block.classList.add('visible');
+  var tabBtn = document.querySelector('.tab[data-target="' + target + '"]');
+  if (tabBtn) tabBtn.classList.add('active');
+  document.querySelectorAll('.company-card').forEach(function(c) {
+    c.classList.toggle('selected', c.dataset.tab === target);
+  });
+  currentTab = target;
+  updateCount();
+}
+
+function doSearch() {
+  var q = document.getElementById('searchInput').value.toLowerCase().trim();
+  var block = document.getElementById('block-' + currentTab);
+  if (!block) return;
+  var pkgs = block.querySelectorAll('.pkg');
+  var visible = 0;
+  pkgs.forEach(function(pkg) {
+    var show = !q || pkg.innerText.toLowerCase().indexOf(q) !== -1;
+    pkg.classList.toggle('hidden', !show);
+    if (show) visible++;
+  });
+  document.getElementById('noResults').style.display = visible === 0 ? 'block' : 'none';
+  updateCount(visible, pkgs.length);
+}
+
+function doSort(mode) {
+  var block = document.getElementById('block-' + currentTab);
+  if (!block) return;
+  var grid = block.querySelector('.pkg-grid');
+  if (!grid) return;
+  var pkgs = Array.from(grid.querySelectorAll('.pkg'));
+  pkgs.sort(function(a, b) {
+    if (mode === 'asc') return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+    if (mode === 'desc') return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+    if (mode === 'alpha') return (a.dataset.name || '').localeCompare(b.dataset.name || '');
+    return 0;
+  });
+  pkgs.forEach(function(p) { grid.appendChild(p); });
+  doSearch();
+}
+
+function doFilterOverview(mode) {
+  ovMode = mode;
+  document.querySelectorAll('.ov-btn').forEach(function(b) { b.classList.remove('active'); });
+  var activeBtn = document.getElementById('ov' + mode.charAt(0).toUpperCase() + mode.slice(1));
+  if (activeBtn) activeBtn.classList.add('active');
+  var grid = document.getElementById('companyGrid');
+  var cards = Array.from(grid.querySelectorAll('.company-card'));
+  if (mode === 'alpha') {
+    cards.sort(function(a, b) { return (a.dataset.company || '').localeCompare(b.dataset.company || ''); });
+    cards.forEach(function(c) { c.style.display = ''; grid.appendChild(c); });
+  } else if (mode === 'fav') {
+    cards.sort(function(a, b) { return (favs.has(a.dataset.company) ? 0 : 1) - (favs.has(b.dataset.company) ? 0 : 1); });
+    cards.forEach(function(c) { c.style.display = favs.has(c.dataset.company) ? '' : 'none'; grid.appendChild(c); });
+  } else {
+    cards.forEach(function(c) { c.style.display = ''; });
+  }
+}
+
+function updateCount(visible, total) {
+  var block = document.getElementById('block-' + currentTab);
+  if (!block) return;
+  var all = block.querySelectorAll('.pkg').length;
+  var shown = (visible !== undefined) ? visible : block.querySelectorAll('.pkg:not(.hidden)').length;
+  var el = document.getElementById('resultCount');
+  if (el) el.textContent = shown < all ? shown + ' of ' + all + ' packages' : all + ' packages';
+}
+
+updateCount();
+</script>
 </body>
 </html>
