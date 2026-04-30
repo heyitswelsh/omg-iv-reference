@@ -46,8 +46,8 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
 .pill-gfe{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;border-radius:20px;padding:3px 10px;background:#042f1e;border:1px solid #065f3e;color:#6ee7b7}
 
 /* PRICING CONTROLS */
-.controls{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
-.search-wrap{position:relative;flex:1;min-width:200px}
+.controls{display:flex;gap:10px;margin-bottom:1.25rem;align-items:center}
+.search-wrap{position:relative;flex:1;min-width:0}
 .search-wrap input{width:100%;padding:9px 12px 9px 36px;background:#1a1a1a;border:1px solid #303030;border-radius:8px;color:#e2e2e2;font-size:13px;font-family:inherit;outline:none;transition:border-color .2s}
 .search-wrap input:focus{border-color:#4ade80}
 .search-wrap input::placeholder{color:#555}
@@ -141,7 +141,7 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
       <div class="icon-box icon-gfe"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M9 12h6M9 16h4"/></svg></div>
     </div>
     <div class="company-name"><a href="https://www.mikesinfusions.com/mobile-iv-therapy-treatments-north-georgia" target="_blank">Mike's Vitamin Infusions</a></div>
-    <div class="meta-row"><span class="badge hours">Mon–Sun · 8am–8pm</span></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–8pm</span></div>
     <div class="meta-row"><span class="badge age">Ages 10+</span></div>
     <div class="service-pills">
       <span class="pill-md"><svg width="8" height="8" viewBox="0 0 16 16" fill="none"><rect x="6" y="1" width="4" height="14" rx="1" fill="#fca5a5"/><rect x="1" y="6" width="14" height="4" rx="1" fill="#fca5a5"/></svg>Med Director</span>
@@ -261,7 +261,7 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
       <button class="fav-btn">⭐</button>
     </div>
     <div class="company-name">Reset IV</div>
-    <div class="meta-row"><span class="badge hours">Sun–Sat · 8am–10pm</span></div>
+    <div class="meta-row"><span class="badge hours">Every day · 8am–10pm</span></div>
     <div class="meta-row"><span class="badge age">Ages 18–65</span></div>
   </div>
 
@@ -476,40 +476,56 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
 <!-- MY IV SPA -->
 <div id="block-myiv" class="pricing-block">
   <div class="pkg-grid">
-    <div class="pkg" data-price="199" data-name="Vital C Drip 5g"><div class="pkg-header"><span class="pkg-name">Vital C Drip 5g</span><span class="pkg-price">$199</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid 5g/10mL</li></ul></div>
-    <div class="pkg" data-price="229" data-name="Vital C Drip 10g"><div class="pkg-header"><span class="pkg-name">Vital C Drip 10g</span><span class="pkg-price">$229</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid 10g/20mL</li></ul></div>
-    <div class="pkg" data-price="229" data-name="H2O Harmony"><div class="pkg-header"><span class="pkg-name">H2O Harmony</span><span class="pkg-price">$229</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Sodium Chloride</li></ul></div>
-    <div class="pkg" data-price="289" data-name="Focus Infusion"><div class="pkg-header"><span class="pkg-name">Focus Infusion</span><span class="pkg-price">$289</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Taurine · Alpha-Lipoic Acid · Magnesium</li></ul></div>
-    <div class="pkg" data-price="289" data-name="Detox Hangover"><div class="pkg-header"><span class="pkg-name">Detox (Hangover)</span><span class="pkg-price">$289</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Amino Blend · Glutathione · Magnesium</li></ul></div>
-    <div class="pkg" data-price="299" data-name="Athletes Edge"><div class="pkg-header"><span class="pkg-name">Athlete's Edge</span><span class="pkg-price">$299</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Amino Blend · Taurine · Magnesium</li></ul></div>
-    <div class="pkg" data-price="309" data-name="Vital Burn"><div class="pkg-header"><span class="pkg-name">Vital Burn (Metabolism)</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Taurine · L-Carnitine</li></ul></div>
-    <div class="pkg" data-price="309" data-name="Hormone Harmony"><div class="pkg-header"><span class="pkg-name">Hormone Harmony</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium · Glutathione · B12</li></ul></div>
-    <div class="pkg" data-price="309" data-name="Migraine Cocktail"><div class="pkg-header"><span class="pkg-name">Migraine Cocktail</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium Chloride · Calcium Chloride · B12</li></ul></div>
-    <div class="pkg" data-price="309" data-name="Radiant You"><div class="pkg-header"><span class="pkg-name">Radiant You</span><span class="pkg-price">$309</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Ascorbic Acid · Glutathione · Biotin</li></ul></div>
-    <div class="pkg" data-price="319" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myer's Cocktail</span><span class="pkg-price">$319</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Ascorbic Acid · Calcium · Magnesium · B12</li></ul></div>
-    <div class="pkg" data-price="319" data-name="Viral Guard Cold Flu"><div class="pkg-header"><span class="pkg-name">Viral Guard (Cold & Flu)</span><span class="pkg-price">$319</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B-Complex · Zinc · Magnesium</li></ul></div>
-    <div class="pkg" data-price="329" data-name="Anti-Inflammatory"><div class="pkg-header"><span class="pkg-name">Anti-Inflammatory</span><span class="pkg-price">$329</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium · Alpha-Lipoic Acid · B12</li></ul></div>
-    <div class="pkg" data-price="369" data-name="Methylene Blue"><div class="pkg-header"><span class="pkg-name">Methylene Blue</span><span class="pkg-price">$369</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Methylene Blue (DPR)</li></ul></div>
-    <div class="pkg" data-price="399" data-name="NAD 250mg"><div class="pkg-header"><span class="pkg-name">NAD+ 250mg</span><span class="pkg-price">$399</span></div></div>
-    <div class="pkg" data-price="699" data-name="NAD 500mg"><div class="pkg-header"><span class="pkg-name">NAD+ 500mg</span><span class="pkg-price">$699</span></div></div>
+    <div class="pkg" data-price="229" data-name="H2O Harmony"><div class="pkg-header"><span class="pkg-name">H2O Harmony (Hydration)</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$229</span><span class="pkg-price-clinic">Clinic $199</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Sodium Chloride</li></ul></div>
+    <div class="pkg" data-price="229" data-name="Vital C Drip"><div class="pkg-header"><span class="pkg-name">Vital C Drip</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$229+</span><span class="pkg-price-clinic">Clinic $199+</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid (Vitamin C)</li></ul></div>
+    <div class="pkg" data-price="279" data-name="Power Drip"><div class="pkg-header"><span class="pkg-name">Power Drip</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$279</span><span class="pkg-price-clinic">Clinic $249</span></div></div></div>
+    <div class="pkg" data-price="289" data-name="Detox Hangover"><div class="pkg-header"><span class="pkg-name">Detox (Hangover IV)</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$289</span><span class="pkg-price-clinic">Clinic $259</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Amino Blend · Glutathione · Magnesium</li></ul></div>
+    <div class="pkg" data-price="289" data-name="Focus Infusion"><div class="pkg-header"><span class="pkg-name">Focus Infusion</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$289</span><span class="pkg-price-clinic">Clinic $259</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Taurine · Alpha-Lipoic Acid · Magnesium</li></ul></div>
+    <div class="pkg" data-price="299" data-name="Athletes Edge"><div class="pkg-header"><span class="pkg-name">Athlete's Edge</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$299</span><span class="pkg-price-clinic">Clinic $269</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Amino Blend · Taurine · Magnesium</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Radiant You"><div class="pkg-header"><span class="pkg-name">Radiant You</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$309</span><span class="pkg-price-clinic">Clinic $279</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Ascorbic Acid · Glutathione · Biotin</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Vital Burn"><div class="pkg-header"><span class="pkg-name">Vital Burn (Metabolism)</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$309</span><span class="pkg-price-clinic">Clinic $279</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Taurine · L-Carnitine</li></ul></div>
+    <div class="pkg" data-price="309" data-name="Hormone Harmony"><div class="pkg-header"><span class="pkg-name">Hormone Harmony</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$309</span><span class="pkg-price-clinic">Clinic $279</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium · Glutathione · B12</li></ul></div>
+    <div class="pkg" data-price="309" data-name="The Alpha Male"><div class="pkg-header"><span class="pkg-name">The Alpha Male</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$309</span><span class="pkg-price-clinic">Clinic $279</span></div></div></div>
+    <div class="pkg" data-price="309" data-name="Migraine Cocktail"><div class="pkg-header"><span class="pkg-name">Migraine Cocktail</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$309</span><span class="pkg-price-clinic">Clinic $279</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium Chloride · Calcium Chloride · B12</li></ul></div>
+    <div class="pkg" data-price="319" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myer's Cocktail</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$319</span><span class="pkg-price-clinic">Clinic $289</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Ascorbic Acid · Calcium · Magnesium · B12</li></ul></div>
+    <div class="pkg" data-price="319" data-name="The Aphrodisiac"><div class="pkg-header"><span class="pkg-name">The Aphrodisiac</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$319</span><span class="pkg-price-clinic">Clinic $289</span></div></div></div>
+    <div class="pkg" data-price="319" data-name="Viral Guard"><div class="pkg-header"><span class="pkg-name">Viral Guard (Cold & Flu)</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$319</span><span class="pkg-price-clinic">Clinic $289</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B-Complex · Zinc · Magnesium</li></ul></div>
+    <div class="pkg" data-price="329" data-name="Anti-Inflammatory"><div class="pkg-header"><span class="pkg-name">Anti-Inflammatory</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$329</span><span class="pkg-price-clinic">Clinic $299</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Magnesium · Alpha-Lipoic Acid · B12</li></ul></div>
+    <div class="pkg" data-price="399" data-name="Methylene Blue"><div class="pkg-header"><span class="pkg-name">Methylene Blue</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$399</span><span class="pkg-price-clinic">Clinic $369</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Methylene Blue (DPR)</li></ul></div>
+    <div class="pkg" data-price="1" data-name="NAD Biohacking"><div class="pkg-header"><span class="pkg-name">My BioHacking IV (NAD+)</span><span class="pkg-price">$1/mg</span></div></div>
+  </div>
+  <div class="addon-section">
+    <h4>Booster Injections</h4>
+    <div class="addon-grid">
+      <span class="addon-pill">Vitamin B12 — $30</span>
+      <span class="addon-pill">Biotin — $30</span>
+      <span class="addon-pill">Vitamin D — $35</span>
+      <span class="addon-pill">Taurine — $30</span>
+      <span class="addon-pill">Vitamin C — $30</span>
+      <span class="addon-pill">Immunity Combo — $50</span>
+      <span class="addon-pill">Glutathione — $30</span>
+      <span class="addon-pill">Lipo-Mino — $60</span>
+      <span class="addon-pill">Toradol — $30</span>
+      <span class="addon-pill">NAD+ — $1/mg</span>
+    </div>
   </div>
 </div>
 
 <!-- PLATINUM IV -->
 <div id="block-platinum" class="pricing-block">
   <div class="pkg-grid">
-    <div class="pkg" data-price="125" data-name="Simply Fluids"><div class="pkg-header"><span class="pkg-name">Simply Fluids</span><span class="pkg-price">Mobile $150 · Clinic $125</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>1,000cc Saline or Lactated Ringer's</li></ul></div>
-    <div class="pkg" data-price="180" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myer's Cocktail</span><span class="pkg-price">Mobile $210 · Clinic $180</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Glutathione</li></ul></div>
+    <div class="pkg" data-price="125" data-name="Simply Fluids"><div class="pkg-header"><span class="pkg-name">Simply Fluids</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$150</span><span class="pkg-price-clinic">Clinic $125</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>1,000cc Saline or Lactated Ringer's</li></ul></div>
+    <div class="pkg" data-price="180" data-name="Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Myer's Cocktail</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$210</span><span class="pkg-price-clinic">Clinic $180</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Glutathione</li></ul></div>
     <div class="pkg" data-price="199" data-name="NAD Infusion"><div class="pkg-header"><span class="pkg-name">NAD+ Infusion</span><span class="pkg-price">$199+</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>NAD+</li></ul></div>
-    <div class="pkg" data-price="225" data-name="Allergy Relief"><div class="pkg-header"><span class="pkg-name">Allergy Relief</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · NAC · Dexamethasone · Benadryl · Magnesium Chloride</li></ul></div>
-    <div class="pkg" data-price="225" data-name="Alleviate PMS Relief"><div class="pkg-header"><span class="pkg-name">Alleviate PMS Relief</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Pain Relief · Magnesium Chloride · B-Complex · B12</li></ul></div>
-    <div class="pkg" data-price="225" data-name="Immunity"><div class="pkg-header"><span class="pkg-name">Immunity</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Zinc Chloride · B-Complex · B12 · NAC · Vitamin C</li></ul></div>
-    <div class="pkg" data-price="225" data-name="Inner Beauty"><div class="pkg-header"><span class="pkg-name">Inner Beauty</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B Complex · NAD+</li></ul></div>
-    <div class="pkg" data-price="225" data-name="Migraine Relief"><div class="pkg-header"><span class="pkg-name">Migraine Relief</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Pain Medication · Nausea Medication · Magnesium Chloride · Dexamethasone</li></ul></div>
-    <div class="pkg" data-price="225" data-name="Reboot Hangover"><div class="pkg-header"><span class="pkg-name">Reboot Hangover</span><span class="pkg-price">Mobile $249 · Clinic $225</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Anti-Nausea · Glutathione · Pain Relief</li></ul></div>
-    <div class="pkg" data-price="250" data-name="Loaded Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Loaded Myer's Cocktail</span><span class="pkg-price">Mobile $299 · Clinic $250</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Glutathione</li></ul></div>
-    <div class="pkg" data-price="335" data-name="Performance Recovery"><div class="pkg-header"><span class="pkg-name">Performance & Recovery</span><span class="pkg-price">Mobile $369 · Clinic $335</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · B Complex · Amino Blend · Magnesium Chloride · B12</li></ul></div>
-    <div class="pkg" data-price="360" data-name="Platinum Wellness"><div class="pkg-header"><span class="pkg-name">Platinum Wellness</span><span class="pkg-price">Mobile $399 · Clinic $360</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Zinc · Glutathione · NAD+ · Amino Blend</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Allergy Relief"><div class="pkg-header"><span class="pkg-name">Allergy Relief</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$249</span><span class="pkg-price-clinic">Clinic $225</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · NAC · Dexamethasone · Benadryl · Magnesium Chloride</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Alleviate PMS Relief"><div class="pkg-header"><span class="pkg-name">Alleviate PMS Relief</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$249</span><span class="pkg-price-clinic">Clinic $225</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Pain Relief · Magnesium Chloride · B-Complex · B12</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Immunity"><div class="pkg-header"><span class="pkg-name">Immunity</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$249</span><span class="pkg-price-clinic">Clinic $225</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Zinc Chloride · B-Complex · B12 · NAC · Vitamin C</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Inner Beauty"><div class="pkg-header"><span class="pkg-name">Inner Beauty</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$249</span><span class="pkg-price-clinic">Clinic $225</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Ascorbic Acid · B Complex · NAD+</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Migraine Relief"><div class="pkg-header"><span class="pkg-name">Migraine Relief</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$249</span><span class="pkg-price-clinic">Clinic $225</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Pain Medication · Nausea Medication · Magnesium Chloride · Dexamethasone</li></ul></div>
+    <div class="pkg" data-price="225" data-name="Reboot Hangover"><div class="pkg-header"><span class="pkg-name">Reboot Hangover</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$249</span><span class="pkg-price-clinic">Clinic $225</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · Anti-Nausea · Glutathione · Pain Relief</li></ul></div>
+    <div class="pkg" data-price="250" data-name="Loaded Myers Cocktail"><div class="pkg-header"><span class="pkg-name">Loaded Myer's Cocktail</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$299</span><span class="pkg-price-clinic">Clinic $250</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Glutathione</li></ul></div>
+    <div class="pkg" data-price="335" data-name="Performance Recovery"><div class="pkg-header"><span class="pkg-name">Performance & Recovery</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$369</span><span class="pkg-price-clinic">Clinic $335</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Vitamin C · B Complex · Amino Blend · Magnesium Chloride · B12</li></ul></div>
+    <div class="pkg" data-price="360" data-name="Platinum Wellness"><div class="pkg-header"><span class="pkg-name">Platinum Wellness</span><div class="pkg-price-stack"><span class="pkg-price-mobile">$399</span><span class="pkg-price-clinic">Clinic $360</span></div></div><div class="pkg-divider"></div><ul class="pkg-items"><li>B-Complex · B12 · Vitamin C · Magnesium Chloride · Zinc · Glutathione · NAD+ · Amino Blend</li></ul></div>
     <div class="pkg" data-price="159" data-name="High Dose Vitamin C"><div class="pkg-header"><span class="pkg-name">High Dose Vitamin C</span><span class="pkg-price">$159–$409</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Available in 3g, 5g, 8g, and 10g doses</li></ul></div>
   </div>
   <div class="addon-section">
