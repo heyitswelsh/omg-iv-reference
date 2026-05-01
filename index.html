@@ -738,4 +738,28 @@ function doFilterOverview(mode) {
   var activeBtn = document.getElementById('ov' + mode.charAt(0).toUpperCase() + mode.slice(1));
   if (activeBtn) activeBtn.classList.add('active');
   var grid = document.getElementById('companyGrid');
-  var cards = Array.from(
+  var cards = Array.from(grid.querySelectorAll('.company-card'));
+  if (mode === 'alpha') {
+    cards.sort(function(a, b) { return (a.dataset.company || '').localeCompare(b.dataset.company || ''); });
+    cards.forEach(function(c) { c.style.display = ''; grid.appendChild(c); });
+  } else if (mode === 'fav') {
+    cards.sort(function(a, b) { return (favs.has(a.dataset.company) ? 0 : 1) - (favs.has(b.dataset.company) ? 0 : 1); });
+    cards.forEach(function(c) { c.style.display = favs.has(c.dataset.company) ? '' : 'none'; grid.appendChild(c); });
+  } else {
+    cards.forEach(function(c) { c.style.display = ''; });
+  }
+}
+
+function updateCount(visible, total) {
+  var block = document.getElementById('block-' + currentTab);
+  if (!block) return;
+  var all = block.querySelectorAll('.pkg').length;
+  var shown = (visible !== undefined) ? visible : block.querySelectorAll('.pkg:not(.hidden)').length;
+  var el = document.getElementById('resultCount');
+  if (el) el.textContent = shown < all ? shown + ' of ' + all + ' packages' : all + ' packages';
+}
+
+updateCount();
+</script>
+</body>
+</html>
