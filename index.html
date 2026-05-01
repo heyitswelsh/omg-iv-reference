@@ -744,4 +744,10 @@ function updateCount(visible, total) {
   var all = block.querySelectorAll('.pkg').length;
   var shown = (visible !== undefined) ? visible : block.querySelectorAll('.pkg:not(.hidden)').length;
   var el = document.getElementById('resultCount');
-  if (el) el.textContent = shown < all ? 
+  if (el) el.textContent = shown < all ? shown + ' of ' + all + ' packages' : all + ' packages';
+}
+
+updateCount();
+</script>
+</body>
+</html>
