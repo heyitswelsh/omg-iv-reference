@@ -433,6 +433,14 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
     <div class="pkg" data-price="399" data-name="Zen Cocktail"><div class="pkg-header"><span class="pkg-name">Zen Cocktail</span><span class="pkg-price">$399</span></div><div class="pkg-divider"></div><ul class="pkg-items"><li>Magnesium · B Complex · B12 · Aminos · NAD+</li></ul></div>
   </div>
   <div class="addon-section"><h4>Add-Ins</h4><div class="addon-grid"><span class="addon-pill">Basic IV add-in $35</span><span class="addon-pill">Basic IM shot $35</span><span class="addon-pill">NAD $1/mg</span></div></div>
+  <div class="addon-section">
+    <h4>Memberships</h4>
+    <div class="addon-grid member">
+      <span class="addon-pill">Silver · $499/mo · 2 IVs</span>
+      <span class="addon-pill">Gold · $999/mo · 4 IVs (Most Popular)</span>
+      <span class="addon-pill">Platinum · $1,999/mo · 8 IVs</span>
+    </div>
+  </div>
 </div>
 
 <!-- PEACH -->
@@ -753,13 +761,4 @@ function doFilterOverview(mode) {
 function updateCount(visible, total) {
   var block = document.getElementById('block-' + currentTab);
   if (!block) return;
-  var all = block.querySelectorAll('.pkg').length;
-  var shown = (visible !== undefined) ? visible : block.querySelectorAll('.pkg:not(.hidden)').length;
-  var el = document.getElementById('resultCount');
-  if (el) el.textContent = shown < all ? shown + ' of ' + all + ' packages' : all + ' packages';
-}
-
-updateCount();
-</script>
-</body>
-</html>
+  var all = block.quer
