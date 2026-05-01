@@ -84,6 +84,7 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
 .addon-section h4{font-size:15px;font-weight:800;margin-bottom:14px;color:#fff;text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid #2a2a2a;padding-bottom:10px}
 .addon-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 .addon-pill{font-size:14px;padding:6px 15px;border-radius:20px;border:1px solid #3a6b3a;background:#1a2e1a;color:#6ee87a;font-weight:600}
+.addon-grid.member .addon-pill{border-color:#6b21a8;background:#1e1030;color:#c084fc}
 .note-box{font-size:13px;padding:.875rem 1.1rem;border-radius:8px;background:#1e1030;color:#c084fc;border:1px solid #6b21a8;margin-bottom:1rem;display:flex;gap:8px;align-items:flex-start;font-weight:500}
 .note-box::before{content:"ℹ";font-size:15px;flex-shrink:0;color:#a855f7}
 .no-results{text-align:center;padding:3rem;color:#444;font-size:14px;display:none}
@@ -459,7 +460,7 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
     <div class="pkg" data-price="695" data-name="NAD 500mg"><div class="pkg-header"><span class="pkg-name">NAD+ 500mg</span><span class="pkg-price">$695</span></div></div>
     <div class="pkg" data-price="695" data-name="Iron Infusions"><div class="pkg-header"><span class="pkg-name">Iron Infusions</span><span class="pkg-price">$695</span></div></div>
   </div>
-  <div class="addon-section"><h4>Membership — $19.95/mo or $195/yr</h4><div class="addon-grid"><span class="addon-pill">10% off IVs</span><span class="addon-pill">$30 add-on credit per visit</span><span class="addon-pill">$50 off one NAD/mo</span><span class="addon-pill">Late cancel waived to 1hr prior</span><span class="addon-pill">No initiation or cancellation fee</span><span class="addon-pill">Min 3-month initial term (monthly)</span></div></div>
+  <div class="addon-section"><h4>Membership — $19.95/mo or $195/yr</h4><div class="addon-grid member"><span class="addon-pill">10% off IVs</span><span class="addon-pill">$30 add-on credit per visit</span><span class="addon-pill">$50 off one NAD/mo</span><span class="addon-pill">Late cancel waived to 1hr prior</span><span class="addon-pill">No initiation or cancellation fee</span><span class="addon-pill">Min 3-month initial term (monthly)</span></div></div>
 </div>
 
 <!-- RECOVERIE NYC -->
@@ -537,7 +538,7 @@ h2{font-size:13px;font-weight:600;margin-bottom:1rem;margin-top:2.5rem;padding-b
     <h4>Add-Ons — $25 Each</h4>
     <div class="addon-grid"><span class="addon-pill">NAC</span><span class="addon-pill">Anti-Nausea Medication</span><span class="addon-pill">Amino Blend</span><span class="addon-pill">Ascorbic Acid</span><span class="addon-pill">B Complex</span><span class="addon-pill">Biotin</span><span class="addon-pill">L-Carnitine</span><span class="addon-pill">Benadryl</span><span class="addon-pill">Glutathione</span><span class="addon-pill">Magnesium</span><span class="addon-pill">Pain Relief</span><span class="addon-pill">Taurine</span></div>
     <h4 style="margin-top:16px">Memberships</h4>
-    <div class="addon-grid" style="margin-top:10px">
+    <div class="addon-grid member" style="margin-top:10px">
       <span class="addon-pill">Gold — $200/mo</span>
       <span class="addon-pill">Diamond — $400/mo</span>
       <span class="addon-pill">Platinum — $700/mo</span>
@@ -743,10 +744,4 @@ function updateCount(visible, total) {
   var all = block.querySelectorAll('.pkg').length;
   var shown = (visible !== undefined) ? visible : block.querySelectorAll('.pkg:not(.hidden)').length;
   var el = document.getElementById('resultCount');
-  if (el) el.textContent = shown < all ? shown + ' of ' + all + ' packages' : all + ' packages';
-}
-
-updateCount();
-</script>
-</body>
-</html>
+  if (el) el.textContent = shown < all ? 
